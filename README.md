@@ -10,11 +10,11 @@
 ## Features
 
 ##### Visuals
--None
+###### -None
 
 ##### Misc
--None
+###### -None
 
 ##### Drawing
--ImGui Drawing(Optimized but blurry on uwp games??)
--Watermark
+###### -ImGui Drawing(Optimized but blurry on uwp games??)
+###### -Watermark
