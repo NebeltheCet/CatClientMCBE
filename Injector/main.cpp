@@ -99,11 +99,12 @@ startOfLoader:
 
     std::cout << "[1] Start Injector\n[2] Exit\nChoice => ";
     std::cin >> startChoice;
-
+    system("cls");
     switch (startChoice) {
     case 1:
         std::cout << "DllPath => ";
         std::cin >> dllPath;
+        system("cls");
         break;
     case 2:
         return EXIT_SUCCESS;

@@ -16,13 +16,16 @@ namespace Hooks {
 
 		typedef HRESULT(__fastcall* D3D11PresentHook) (IDXGISwapChain* pSwapChain, UINT syncInterval, UINT uFLags);
 		inline D3D11PresentHook oHkPresent = nullptr;
+
+		typedef HRESULT(__stdcall* D3D11ResizeHook) (IDXGISwapChain* pSwapChain, UINT uBufCount, UINT uWidth, UINT uHeight, DXGI_FORMAT newFormat, UINT uFLags);
+		inline D3D11ResizeHook oHkResize = nullptr;
 	}
 
 	namespace Functions {
 		inline static bool HasInitialized = false;
 		inline HRESULT __fastcall hkPresent(IDXGISwapChain* pSChain, UINT syncInterval, UINT uFlags) {
 			HWND hwnd = (HWND)FindWindowA(0, "Minecraft");
-			if (!HasInitialized || !pSwapChain) {
+			if (!HasInitialized || !pSwapChain || !pDevice) {
 				pSwapChain = pSChain;
 				if (SUCCEEDED(pSwapChain->GetDevice(__uuidof(ID3D11Device), (void**)&pDevice))) {
 					pDevice->GetImmediateContext(&pContext);
@@ -67,6 +70,20 @@ namespace Hooks {
 			return Originals::oHkPresent(pSChain, syncInterval, uFlags);
 		};
 
+		inline HRESULT __stdcall hkResize(IDXGISwapChain* pSwapChain, UINT uBufCount, UINT uWidth, UINT uHeight, DXGI_FORMAT newFormat, UINT uFLags) {
+			if (renderTargetView)
+				renderTargetView->Release();
+
+			if (pContext)
+				pContext->Release();
+
+			if (pDevice)
+				pDevice->Release();
+
+			pDevice = nullptr;
+			return Originals::oHkResize(pSwapChain, uBufCount, uWidth, uHeight, newFormat, uFLags);
+		}
+
 		inline void hkClientInstance(uintptr_t* cInstance, void* a2) {
 			Originals::oHkClientInstance(cInstance, a2);
 		}
@@ -82,6 +99,7 @@ namespace Hooks {
 		HookFunction("hkClientInstance", (void*)AddrCInstance, &Functions::hkClientInstance, reinterpret_cast<LPVOID*>(&Originals::oHkClientInstance));
 		if (pSwapChain) {
 			HookFunction("hkPresent", (void*)pSwapChainVTable[8], &Functions::hkPresent, reinterpret_cast<LPVOID*>(&Originals::oHkPresent));
+			HookFunction("hkResize", (void*)pSwapChainVTable[13], &Functions::hkResize, reinterpret_cast<LPVOID*>(&Originals::oHkResize));
 		}
 		if (MH_EnableHook(MH_ALL_HOOKS) != MH_STATUS::MH_OK)
 			return false;
