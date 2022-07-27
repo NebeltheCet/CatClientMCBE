@@ -94,28 +94,41 @@ bool Inject(const char* dllPath) {
 int main() {
 startOfLoader:
     /* Variables */
-    int startChoice;
-    std::string dllPath;
+    int startChoice = -1;
+    std::string dllPath = "";
 
-    std::cout << "[1] Start Injector\n[2] Exit\nChoice => ";
+    std::cout << "[1] CatClient\n[2] Start Injector\n[3] Exit\nChoice => ";
     std::cin >> startChoice;
     system("cls");
     switch (startChoice) {
     case 1:
+        dllPath = "CatClient.dll";
+        break;
+    case 2:
         std::cout << "DllPath => ";
         std::cin >> dllPath;
         system("cls");
         break;
-    case 2:
+    case 3:
         return EXIT_SUCCESS;
         break;
     default:
-        std::cout << "\nInvalid Choice\n";
-        std::cout << "Back to Start...\n";
-        Sleep(800);
-        system("cls");
-        goto startOfLoader;
+        if (startChoice != -1) {
+            std::cout << "\nInvalid Choice\n";
+            std::cout << "Back to Start...\n";
+            Sleep(800);
+            system("cls");
+            goto startOfLoader;
+        }
         break;
+    }
+
+    if (startChoice == -1) {
+        return EXIT_SUCCESS;
+    }
+
+    if (dllPath.find(".dll") == std::string::npos) {
+        dllPath += ".dll";
     }
 
     if (dllPath == "" || dllPath.size() <= 5) {
@@ -128,7 +141,7 @@ startOfLoader:
 
     /* Change Permissions Here. */
     DWORD dwResult = SetDllPermissions(dllPath);
-    if (dwResult != ERROR_SUCCESS) {
+    if (dwResult != ERROR_SUCCESS) { /* If the Message Repeats Rebuild the Dll */
         std::cout << "Failed to Set Dll Permissions.\n";
         std::cout << "Back to Start...\n";
         Sleep(800);

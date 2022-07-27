@@ -181,6 +181,7 @@
     <ClCompile Include="SDK\Utils\Utils.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Features\Drawing\Fonts\DroidSans.hpp" />
     <ClInclude Include="Features\Drawing\Fonts\SmallestPixelFont.hpp" />
     <ClInclude Include="Features\Drawing\Menu.hpp" />
     <ClInclude Include="Features\Drawing\Renderer.hpp" />

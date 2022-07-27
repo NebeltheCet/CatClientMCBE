@@ -11,8 +11,11 @@ namespace Hooks {
 		return;
 	}
 	namespace Originals {
+		/* Game */
 		typedef void(__thiscall* CInstance)(uintptr_t*, void*);
 		inline CInstance oHkClientInstance;
+
+		/* Drawing */
 
 		typedef HRESULT(__fastcall* D3D11PresentHook) (IDXGISwapChain* pSwapChain, UINT syncInterval, UINT uFLags);
 		inline D3D11PresentHook oHkPresent = nullptr;
@@ -34,15 +37,14 @@ namespace Hooks {
 					pDevice->CreateRenderTargetView(pBackBuffer, NULL, &renderTargetView);
 					pBackBuffer->Release();
 					ImGui::CreateContext();
-					ImGuiIO& io = ImGui::GetIO();
-					io.ConfigFlags = ImGuiConfigFlags_NoMouseCursorChange;
 					ImGui_ImplWin32_Init(hwnd);
 					ImGui_ImplDX11_Init(pDevice, pContext);
-					//ImFontConfig cfg; /* The FreeType ImGui Define is needed but that breaks the dll making it not injectable */
-					//cfg.FontBuilderFlags |= ImGuiFreeTypeBuilderFlags::ImGuiFreeTypeBuilderFlags_ForceAutoHint;
-					io.Fonts->AddFontFromMemoryCompressedTTF(smolPixel, smolPixelSize, 12.0f, NULL/*&cfg*/);
-					Utils::DebugLogOutput("\nInitialized In Present\n");
-					HasInitialized = true;
+					Menu::drawFont = ImGui::GetIO().Fonts->AddFontFromMemoryCompressedTTF(DroidSansData, DroidSansSize, 16.f, NULL); /* https://cdn.discordapp.com/attachments/959288211581042738/1001671139220787200/unknown.png */
+					//Menu::drawFont = ImGui::GetIO().Fonts->AddFontFromMemoryCompressedTTF(smolPixel, smolPixelSize, 16.f, NULL); /* https://cdn.discordapp.com/attachments/959288211581042738/1001671651848626206/unknown.png */
+					if (!HasInitialized) {
+						Utils::DebugLogOutput("\nInitialized In Present\n");
+						HasInitialized = true;
+					}
 				}
 				else
 					return Originals::oHkPresent(pSChain, syncInterval, uFlags);
@@ -58,9 +60,8 @@ namespace Hooks {
 			ImGui_ImplWin32_NewFrame();
 			ImGui::NewFrame();
 
-			ImDrawList* pDraw = ImGui::GetForegroundDrawList();
-			Render::doRenderer(pDraw);
-			Menu::doMenu(pDraw);
+			Render::doRenderer();
+			Menu::doMenu();
 
 			ImGui::Render();
 
@@ -90,13 +91,13 @@ namespace Hooks {
 	}
 	inline bool InitHooks() {
 		/* Method Pointers */
-		uintptr_t AddrCInstance = Utils::FindSig("48 89 5C 24 ?? 48 89 74 24 ?? 57 48 83 EC ?? 48 8B F9 48 8B 01");
+		uintptr_t AddrCInstance = /* Old One was Wrong dont know the new One */0;
 		uintptr_t** pSwapChainVTable = *reinterpret_cast<uintptr_t***>(pSwapChain);
 
 		if (MH_Initialize() != MH_STATUS::MH_OK)
 			return false;
 
-		HookFunction("hkClientInstance", (void*)AddrCInstance, &Functions::hkClientInstance, reinterpret_cast<LPVOID*>(&Originals::oHkClientInstance));
+		//HookFunction("hkClientInstance", (void*)AddrCInstance, &Functions::hkClientInstance, reinterpret_cast<LPVOID*>(&Originals::oHkClientInstance));
 		if (pSwapChain) {
 			HookFunction("hkPresent", (void*)pSwapChainVTable[8], &Functions::hkPresent, reinterpret_cast<LPVOID*>(&Originals::oHkPresent));
 			HookFunction("hkResize", (void*)pSwapChainVTable[13], &Functions::hkResize, reinterpret_cast<LPVOID*>(&Originals::oHkResize));

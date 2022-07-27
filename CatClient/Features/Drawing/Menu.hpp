@@ -2,7 +2,8 @@
 
 namespace Menu {
 	inline bool menuOpened = false;
-	inline void doMenu(ImDrawList* pDraw) {
+	inline ImFont* drawFont = nullptr;
+	inline void doMenu() {
 
 	}
 }

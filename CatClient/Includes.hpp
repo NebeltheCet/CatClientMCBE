@@ -26,11 +26,13 @@ static ID3D11RenderTargetView* renderTargetView = nullptr;
 
 /* External Includes */
 #include "Features/Drawing/Fonts/SmallestPixelFont.hpp"
+#include "Features/Drawing/Fonts/DroidSans.hpp"
 
 #include "SDK/ImGui/imgui.h"
 #include "SDK/ImGui/imgui_impl_win32.h"
 #include "SDK/ImGui/imgui_impl_dx11.h"
 #include "SDK/ImGui/freetype/imgui_freetype.h"
+#include "SDK/ImGui/imgui_internal.h"
 
 #include "SDK/Minhook/minhook.h"
 

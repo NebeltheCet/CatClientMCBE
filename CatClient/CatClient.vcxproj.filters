@@ -293,5 +293,8 @@
     <ClInclude Include="SDK\FreeType\ft2build.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Features\Drawing\Fonts\DroidSans.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
