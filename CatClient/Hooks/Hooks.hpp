@@ -12,8 +12,8 @@ namespace Hooks {
 	}
 	namespace Originals {
 		/* Game */
-		typedef void(__thiscall* CInstance)(uintptr_t*, void*);
-		inline CInstance oHkClientInstance;
+		typedef void(__thiscall* AVKeyItem)(uint64_t, bool);
+		inline AVKeyItem oHkKeyItem;
 
 		/* Drawing */
 
@@ -39,8 +39,8 @@ namespace Hooks {
 					ImGui::CreateContext();
 					ImGui_ImplWin32_Init(hwnd);
 					ImGui_ImplDX11_Init(pDevice, pContext);
-					Menu::drawFont = ImGui::GetIO().Fonts->AddFontFromMemoryCompressedTTF(DroidSansData, DroidSansSize, 16.f, NULL); /* https://cdn.discordapp.com/attachments/959288211581042738/1001671139220787200/unknown.png */
-					//Menu::drawFont = ImGui::GetIO().Fonts->AddFontFromMemoryCompressedTTF(smolPixel, smolPixelSize, 16.f, NULL); /* https://cdn.discordapp.com/attachments/959288211581042738/1001671651848626206/unknown.png */
+					ImGui::GetIO().Fonts->AddFontFromMemoryCompressedTTF(DroidSansData, DroidSansSize, 16.f, NULL); /* https://cdn.discordapp.com/attachments/959288211581042738/1001671139220787200/unknown.png */
+					//ImGui::GetIO().Fonts->AddFontFromMemoryCompressedTTF(smolPixel, smolPixelSize, 16.f, NULL); /* https://cdn.discordapp.com/attachments/959288211581042738/1001671651848626206/unknown.png */
 					if (!HasInitialized) {
 						Utils::DebugLogOutput("\nInitialized In Present\n");
 						HasInitialized = true;
@@ -50,7 +50,7 @@ namespace Hooks {
 					return Originals::oHkPresent(pSChain, syncInterval, uFlags);
 			}
 
-			if (GetAsyncKeyState(VK_INSERT) & 1) /* Wont work since MCBE is Sandboxed */
+			if (Input::IsKeyDown(VK_INSERT))
 				Menu::menuOpened = !Menu::menuOpened;
 
 			ImGui::GetStyle().AntiAliasedFill = true;
@@ -85,37 +85,37 @@ namespace Hooks {
 			return Originals::oHkResize(pSwapChain, uBufCount, uWidth, uHeight, newFormat, uFLags);
 		}
 
-		inline void hkClientInstance(uintptr_t* cInstance, void* a2) {
-			Originals::oHkClientInstance(cInstance, a2);
+		inline void hkKeyItem(uint64_t PressedKey, bool IsDown) {
+			Input::KeyMap[PressedKey] = IsDown;
+
+			Originals::oHkKeyItem(PressedKey, IsDown);
 		}
 	}
 	inline bool InitHooks() {
 		/* Method Pointers */
-		uintptr_t AddrCInstance = /* Old One was Wrong dont know the new One */0;
-		uintptr_t** pSwapChainVTable = *reinterpret_cast<uintptr_t***>(pSwapChain);
+		uint64_t AddrKeyItem = Utils::FindSig("48 ? ? 48 ? ? ? 4C 8D 05 ? ? ? ? 89");
+		uint64_t** pSwapChainVTable = *reinterpret_cast<uintptr_t***>(pSwapChain);
 
 		if (MH_Initialize() != MH_STATUS::MH_OK)
 			return false;
 
-		//HookFunction("hkClientInstance", (void*)AddrCInstance, &Functions::hkClientInstance, reinterpret_cast<LPVOID*>(&Originals::oHkClientInstance));
+		HookFunction("hkKeyItem", (void*)AddrKeyItem, &Functions::hkKeyItem, reinterpret_cast<LPVOID*>(&Originals::oHkKeyItem));
 		if (pSwapChain) {
 			HookFunction("hkPresent", (void*)pSwapChainVTable[8], &Functions::hkPresent, reinterpret_cast<LPVOID*>(&Originals::oHkPresent));
 			HookFunction("hkResize", (void*)pSwapChainVTable[13], &Functions::hkResize, reinterpret_cast<LPVOID*>(&Originals::oHkResize));
 		}
+
 		if (MH_EnableHook(MH_ALL_HOOKS) != MH_STATUS::MH_OK)
 			return false;
 
 		return true;
 	}
 
-	inline bool UnInitHooks() { /* Made this a bool just in case */
-		if (MH_DisableHook(MH_ALL_HOOKS) != MH_STATUS::MH_OK)
-			return false;
-
-		if (MH_RemoveHook(MH_ALL_HOOKS) != MH_STATUS::MH_OK)
-			return false;
-
+	inline bool UnInitHooks() {
 		if (MH_Uninitialize() != MH_STATUS::MH_OK)
+			return false;
+
+		if (MH_DisableHook(MH_ALL_HOOKS) != MH_STATUS::MH_OK)
 			return false;
 
 		return true;

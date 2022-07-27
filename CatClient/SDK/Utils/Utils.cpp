@@ -18,15 +18,12 @@ void Utils::CreateClientDirectory(std::string path) {
 	std::filesystem::create_directories(precisePath);
 }
 
-void Utils::DeleteClientDirectory(std::string path) {
+void Utils::DeleteLogContent(std::string path) {
 	std::string precisePath = getenv("APPDATA") + std::string("\\..\\Local\\Packages\\Microsoft.MinecraftUWP_8wekyb3d8bbwe\\RoamingState\\" + path);
 	if (doesPathExist(precisePath)) {
-		if (std::filesystem::is_directory(precisePath)) {
-			std::filesystem::remove_all(precisePath);
-		}
-		else {
-			std::filesystem::remove(precisePath);
-		}
+		std::ofstream ClearFile;
+		ClearFile.open("test.txt", std::ofstream::out | std::ofstream::trunc);
+		ClearFile.close();
 	}
 }
 

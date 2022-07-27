@@ -13,6 +13,7 @@
 #include <filesystem>
 #include <fstream>
 #include <sstream>
+#include <map>
 
 /* DirectX11 Includes */
 #include <dxgi.h>
@@ -31,14 +32,14 @@ static ID3D11RenderTargetView* renderTargetView = nullptr;
 #include "SDK/ImGui/imgui.h"
 #include "SDK/ImGui/imgui_impl_win32.h"
 #include "SDK/ImGui/imgui_impl_dx11.h"
-#include "SDK/ImGui/freetype/imgui_freetype.h"
 #include "SDK/ImGui/imgui_internal.h"
 
 #include "SDK/Minhook/minhook.h"
 
+#include "SDK/Utils/InputStuff.hpp"
 #include "SDK/Utils/Utils.hpp"
 
-#include "Features/Drawing/Menu.hpp"
 #include "Features/Drawing/Renderer.hpp"
+#include "Features/Drawing/Menu.hpp"
 
 #include "Hooks/Hooks.hpp"

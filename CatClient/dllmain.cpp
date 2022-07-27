@@ -1,7 +1,9 @@
 #include "Includes.hpp"
 
 void mainThread(LPVOID lpParam) {
-	Utils::DeleteClientDirectory("CatClient"); /* Delete the Previous Directory Containing the Log. */
+	if (Utils::doesPathExist) {
+		Utils::DeleteLogContent("CatClient/ClientLog.txt"); /* Delete the Previous Directory Containing the Log. */
+	}
 	Utils::CreateClientDirectory("CatClient"); /* Create a New Directory where the log can be stored at. */
 
 	/* SwapChain */
@@ -18,22 +20,22 @@ void mainThread(LPVOID lpParam) {
 	else
 		Utils::DebugLogOutput("Failed to Initialize Hooks.\n");
 
-	while (!GetAsyncKeyState(VK_END)) /* Doesn't work since the Game is Sandboxed */
-		Sleep(1);
+	//while (!Input::IsKeyDown(VK_END)) /* Crashes ;c */
+	//	Sleep(1);
 
-	/* ImGui */
-	ImGui_ImplDX11_Shutdown();
-	ImGui_ImplWin32_Shutdown();
-	ImGui::DestroyContext();
+	///* Hooks */
+	//if (Hooks::UnInitHooks())
+	//	Utils::DebugLogOutput("Successfully Uninitialized Hooks.\n");
+	//else
+	//	Utils::DebugLogOutput("Failed to Uninitialize Hooks.\n");
 
-	/* Hooks */
-	if (Hooks::UnInitHooks())
-		Utils::DebugLogOutput("Successfully Uninitialized Hooks.\n");
-	else
-		Utils::DebugLogOutput("Failed to Uninitialize Hooks.\n");
+	///* ImGui */
+	//ImGui_ImplDX11_Shutdown();
+	//ImGui_ImplWin32_Shutdown();
+	//ImGui::DestroyContext();
 
-	Utils::DebugLogOutput("Uninjected.");
-	FreeLibraryAndExitThread(static_cast<HMODULE>(lpParam), EXIT_SUCCESS);
+	//Utils::DebugLogOutput("Uninjected.");
+	//FreeLibraryAndExitThread(static_cast<HMODULE>(lpParam), EXIT_SUCCESS);
 }
 
 BOOL WINAPI DllMain(HMODULE hModule, DWORD dwCallReason, LPVOID lpReserved) {

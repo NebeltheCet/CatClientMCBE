@@ -81,14 +81,12 @@
     <OutDir>$(SolutionDir)build\</OutDir>
     <IntDir>$(SolutionDir)bin\</IntDir>
     <TargetName>debugCatClient</TargetName>
-    <IncludePath>$(SolutionDir)CatClient\SDK\FreeType</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
     <TargetName>CatClient</TargetName>
     <OutDir>$(SolutionDir)build\</OutDir>
     <IntDir>$(SolutionDir)bin\</IntDir>
-    <IncludePath>$(SolutionDir)CatClient\SDK\FreeType</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -139,7 +137,7 @@
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableUAC>false</EnableUAC>
-      <AdditionalDependencies>$(SolutionDir)CatClient\SDK\FreeType\freetype.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -161,14 +159,13 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableUAC>false</EnableUAC>
-      <AdditionalDependencies>$(SolutionDir)CatClient\SDK\FreeType\freetype.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp" />
     <ClCompile Include="SDK\ImGui\imgui.cpp" />
     <ClCompile Include="SDK\ImGui\imgui_draw.cpp" />
-    <ClCompile Include="SDK\ImGui\freetype\imgui_freetype.cpp" />
     <ClCompile Include="SDK\ImGui\imgui_impl_dx11.cpp" />
     <ClCompile Include="SDK\ImGui\imgui_impl_win32.cpp" />
     <ClCompile Include="SDK\ImGui\imgui_tables.cpp" />
@@ -187,64 +184,8 @@
     <ClInclude Include="Features\Drawing\Renderer.hpp" />
     <ClInclude Include="Hooks\Hooks.hpp" />
     <ClInclude Include="Includes.hpp" />
-    <ClInclude Include="SDK\FreeType\freetype\config\ftconfig.h" />
-    <ClInclude Include="SDK\FreeType\freetype\config\ftheader.h" />
-    <ClInclude Include="SDK\FreeType\freetype\config\ftmodule.h" />
-    <ClInclude Include="SDK\FreeType\freetype\config\ftoption.h" />
-    <ClInclude Include="SDK\FreeType\freetype\config\ftstdlib.h" />
-    <ClInclude Include="SDK\FreeType\freetype\config\integer-types.h" />
-    <ClInclude Include="SDK\FreeType\freetype\config\mac-support.h" />
-    <ClInclude Include="SDK\FreeType\freetype\config\public-macros.h" />
-    <ClInclude Include="SDK\FreeType\freetype\freetype.h" />
-    <ClInclude Include="SDK\FreeType\freetype\ftadvanc.h" />
-    <ClInclude Include="SDK\FreeType\freetype\ftbbox.h" />
-    <ClInclude Include="SDK\FreeType\freetype\ftbdf.h" />
-    <ClInclude Include="SDK\FreeType\freetype\ftbitmap.h" />
-    <ClInclude Include="SDK\FreeType\freetype\ftbzip2.h" />
-    <ClInclude Include="SDK\FreeType\freetype\ftcache.h" />
-    <ClInclude Include="SDK\FreeType\freetype\ftchapters.h" />
-    <ClInclude Include="SDK\FreeType\freetype\ftcid.h" />
-    <ClInclude Include="SDK\FreeType\freetype\ftcolor.h" />
-    <ClInclude Include="SDK\FreeType\freetype\ftdriver.h" />
-    <ClInclude Include="SDK\FreeType\freetype\fterrdef.h" />
-    <ClInclude Include="SDK\FreeType\freetype\fterrors.h" />
-    <ClInclude Include="SDK\FreeType\freetype\ftfntfmt.h" />
-    <ClInclude Include="SDK\FreeType\freetype\ftgasp.h" />
-    <ClInclude Include="SDK\FreeType\freetype\ftglyph.h" />
-    <ClInclude Include="SDK\FreeType\freetype\ftgxval.h" />
-    <ClInclude Include="SDK\FreeType\freetype\ftgzip.h" />
-    <ClInclude Include="SDK\FreeType\freetype\ftimage.h" />
-    <ClInclude Include="SDK\FreeType\freetype\ftincrem.h" />
-    <ClInclude Include="SDK\FreeType\freetype\ftlcdfil.h" />
-    <ClInclude Include="SDK\FreeType\freetype\ftlist.h" />
-    <ClInclude Include="SDK\FreeType\freetype\ftlogging.h" />
-    <ClInclude Include="SDK\FreeType\freetype\ftlzw.h" />
-    <ClInclude Include="SDK\FreeType\freetype\ftmac.h" />
-    <ClInclude Include="SDK\FreeType\freetype\ftmm.h" />
-    <ClInclude Include="SDK\FreeType\freetype\ftmodapi.h" />
-    <ClInclude Include="SDK\FreeType\freetype\ftmoderr.h" />
-    <ClInclude Include="SDK\FreeType\freetype\ftotval.h" />
-    <ClInclude Include="SDK\FreeType\freetype\ftoutln.h" />
-    <ClInclude Include="SDK\FreeType\freetype\ftparams.h" />
-    <ClInclude Include="SDK\FreeType\freetype\ftpfr.h" />
-    <ClInclude Include="SDK\FreeType\freetype\ftrender.h" />
-    <ClInclude Include="SDK\FreeType\freetype\ftsizes.h" />
-    <ClInclude Include="SDK\FreeType\freetype\ftsnames.h" />
-    <ClInclude Include="SDK\FreeType\freetype\ftstroke.h" />
-    <ClInclude Include="SDK\FreeType\freetype\ftsynth.h" />
-    <ClInclude Include="SDK\FreeType\freetype\ftsystem.h" />
-    <ClInclude Include="SDK\FreeType\freetype\fttrigon.h" />
-    <ClInclude Include="SDK\FreeType\freetype\fttypes.h" />
-    <ClInclude Include="SDK\FreeType\freetype\ftwinfnt.h" />
-    <ClInclude Include="SDK\FreeType\freetype\otsvg.h" />
-    <ClInclude Include="SDK\FreeType\freetype\t1tables.h" />
-    <ClInclude Include="SDK\FreeType\freetype\ttnameid.h" />
-    <ClInclude Include="SDK\FreeType\freetype\tttables.h" />
-    <ClInclude Include="SDK\FreeType\freetype\tttags.h" />
-    <ClInclude Include="SDK\FreeType\ft2build.h" />
     <ClInclude Include="SDK\ImGui\imconfig.h" />
     <ClInclude Include="SDK\ImGui\imgui.h" />
-    <ClInclude Include="SDK\ImGui\freetype\imgui_freetype.h" />
     <ClInclude Include="SDK\ImGui\imgui_impl_dx11.h" />
     <ClInclude Include="SDK\ImGui\imgui_impl_win32.h" />
     <ClInclude Include="SDK\ImGui\imgui_internal.h" />
@@ -259,6 +200,7 @@
     <ClInclude Include="SDK\Minhook\hde\table64.h" />
     <ClInclude Include="SDK\Minhook\minhook.h" />
     <ClInclude Include="SDK\Minhook\trampoline.h" />
+    <ClInclude Include="SDK\Utils\InputStuff.hpp" />
     <ClInclude Include="SDK\Utils\Utils.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
