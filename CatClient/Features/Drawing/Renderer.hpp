@@ -1,8 +1,8 @@
 #pragma once
 
 namespace Variables {
-	inline bool Watermark = false;
 	inline bool ShowFPS = false;
+	inline bool ShowCPS = false;
 	inline bool debugIndicators = false;
 }
 
@@ -62,29 +62,32 @@ namespace CustomDrawList { /* Made for an Easier Way to Draw */
 		drawFilledRect(ImVec2(vecPos.x - 2.f, vecPos.y + 1.f), ImVec2(vecPos.x + 95.f, vecPos.y + 20.f), ImColor(pColorGUI.Value.x, pColorGUI.Value.y, pColorGUI.Value.z, 175.f), 0.0f, 0);
 		drawText(vecPos, pText, variable ? pColorActive : currentSelected != neededSelected ? pColorOff : pColorOn);
 	}
+
+	inline void RectText(ImVec2 vecPos, std::string pText, ImColor pColorText, ImColor pColorGUI) {
+		drawRect(ImVec2(vecPos.x - 3.f, vecPos.y), ImVec2(vecPos.x + 96.f, vecPos.y + 21.f), pColorGUI, 0.0f, 0, 1.6f);
+		drawRect(ImVec2(vecPos.x - 2.8f, vecPos.y + 0.8f), ImVec2(vecPos.x + 96.8f, vecPos.y + 21.8f), ImColor(100.f, 100.f, 100.f, 25.f), 0.0f, 0, 1.6f); /* Shadow */
+		drawFilledRect(ImVec2(vecPos.x - 2.f, vecPos.y + 1.f), ImVec2(vecPos.x + 95.f, vecPos.y + 20.f), ImColor(pColorGUI.Value.x, pColorGUI.Value.y, pColorGUI.Value.z, 175.f), 0.0f, 0);
+		drawText(vecPos, pText, pColorText);
+	}
 }
 namespace Render {
 	inline void doRenderer() {
 		int FramesPerSecond = floorf(1.f / ImGui::GetIO().DeltaTime);
-		float yPos = 0.f;
+		ImColor pColorIndicator = ImColor(130.f, 120.f, 160.f);
 
 		/* Initialize the Drawer */
 		CustomDrawList::InitDrawer(5.f);
 
-		/* Watermark */
-		if (Variables::Watermark) {
-			CustomDrawList::drawText(ImVec2(5.f, yPos), "CatClient"); yPos += 20.f;
-		}
+		float yPos = ImGui::GetIO().DisplaySize.y - 60.f; /* This is only accurate in fullscreen TODO: fix it so it automatically aligns with the window size */
 
 		/* FPS */
 		if (Variables::ShowFPS) {
-			CustomDrawList::drawText(ImVec2(5.f, yPos), "FPS: " + std::to_string(FramesPerSecond)); yPos += 20.f;
+			CustomDrawList::RectText(ImVec2(2.f, yPos), "FPS: " + std::to_string(FramesPerSecond), pColorIndicator, ImColor(25.f, 25.f, 25.f)); yPos -= 20.f;
 		}
 
 		/* Debug Indicators */
 		if (Variables::debugIndicators) {
-			CustomDrawList::drawText(ImVec2(5.f, yPos), "Watermark => " + std::to_string(Variables::Watermark)); yPos += 20.f;
-			CustomDrawList::drawText(ImVec2(5.f, yPos), "ShowFPS => " + std::to_string(Variables::ShowFPS)); yPos += 20.f;
+			CustomDrawList::RectText(ImVec2(2.f, yPos), "ShowFPS => " + std::to_string(Variables::ShowFPS), pColorIndicator, ImColor(25.f, 25.f, 25.f)); yPos -= 20.f;
 		}
 	}
 }

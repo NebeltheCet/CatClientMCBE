@@ -15,6 +15,12 @@ namespace Hooks {
 		typedef void(__thiscall* AVKeyItem)(uint64_t, bool);
 		inline AVKeyItem oHkKeyItem;
 
+		//typedef void(__thiscall* GameModeTick)(uint64_t*); 
+		//inline GameModeTick oHkGameModeTick;
+
+		//typedef void(__thiscall* ActorTick)(uint64_t&);
+		//inline ActorTick oHkActorTick;
+
 		/* Drawing */
 
 		typedef HRESULT(__fastcall* D3D11PresentHook) (IDXGISwapChain* pSwapChain, UINT syncInterval, UINT uFLags);
@@ -90,16 +96,28 @@ namespace Hooks {
 
 			Originals::oHkKeyItem(PressedKey, IsDown);
 		}
+
+		//inline void hkGameModeTick(uint64_t* gm) {
+		//	Originals::oHkGameModeTick(gm);
+		//}
+
+		//inline void hkActorTick(uint64_t blockSource) {
+		//	Originals::oHkActorTick(blockSource);
+		//}
 	}
 	inline bool InitHooks() {
 		/* Method Pointers */
 		uint64_t AddrKeyItem = Utils::FindSig("48 ? ? 48 ? ? ? 4C 8D 05 ? ? ? ? 89");
+		//uint64_t AddrGameMode = Utils::FindSig("E8 ? ? ? ? 80 BB ? ? ? ? ? 0F 84 ? ? ? ? 48 83 BB ? ? ? ? ?"); //GameMode::tick /* Unsure if the sig is right */
+		//uint64_t AddrActorTick = Utils::FindSig("E8 ? ? ? ? 49 8B 06 41 8B 5E 08 "); //Actor::tick /* Unsure if the sig is right */
 		uint64_t** pSwapChainVTable = *reinterpret_cast<uintptr_t***>(pSwapChain);
 
 		if (MH_Initialize() != MH_STATUS::MH_OK)
 			return false;
 
 		HookFunction("hkKeyItem", (void*)AddrKeyItem, &Functions::hkKeyItem, reinterpret_cast<LPVOID*>(&Originals::oHkKeyItem));
+		//HookFunction("hkGameModeTick", (void*)AddrGameMode, &Functions::hkGameModeTick, reinterpret_cast<LPVOID*>(&Originals::oHkGameModeTick));
+		//HookFunction("hkActorTick", (void*)AddrActorTick, &Functions::hkActorTick, reinterpret_cast<LPVOID*>(&Originals::oHkActorTick));
 		if (pSwapChain) {
 			HookFunction("hkPresent", (void*)pSwapChainVTable[8], &Functions::hkPresent, reinterpret_cast<LPVOID*>(&Originals::oHkPresent));
 			HookFunction("hkResize", (void*)pSwapChainVTable[13], &Functions::hkResize, reinterpret_cast<LPVOID*>(&Originals::oHkResize));
