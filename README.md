@@ -1,6 +1,6 @@
 # CatClientMCBE
-##### This is a Minecraft Bedrock Edition Client
-##### If you have any Improvements of the Client, please make a Pull request
+- This is a Minecraft Bedrock Edition Client
+- If you have any Improvements of the Client, please make a Pull request
 
 ## Credits
 
@@ -32,20 +32,20 @@
 ## To-Do
 
 #### Drawing
-##### [ ] Fix Window Alignment on the Indicators
-##### [ ] Freetype as Font Rasterizer(ImGui)
-##### [ ] Add More Menu Objects(Sliders, Tabs)
-##### [ ] Make Menu Toggleable
+- [ ] Fix Window Alignment on the Indicators
+- [ ] Freetype as Font Rasterizer(ImGui)
+- [ ] Add More Menu Objects(Sliders, Tabs)
+- [ ] Make Menu Toggleable
 
 #### Input
-##### [ ] Add a Proper way to Handle Toggle / Release / Hold Input
+- [X] Add a Proper way to Handle Toggle / Release / Hold Input
 
 #### Features
-##### [ ] Add CPS Counter
-##### [ ] Add Reach Indicator(Head Hitbox as Distance point)
+- [ ] Add CPS Counter
+- [ ] Add Reach Indicator(Head Hitbox as Distance point)
 
 #### Global
-##### [ ] Add UnInjection
+- [ ] Add UnInjection
 
 ## Bugs
 

@@ -39,7 +39,8 @@ static ID3D11RenderTargetView* renderTargetView = nullptr;
 #include "SDK/Utils/InputStuff.hpp"
 #include "SDK/Utils/Utils.hpp"
 
-#include "Features/Drawing/Renderer.hpp"
+#include "Features/Drawing/Renderer/Renderer.hpp"
 #include "Features/Drawing/Menu.hpp"
+#include "Features/Drawing/Indicator.hpp"
 
 #include "Hooks/Hooks.hpp"

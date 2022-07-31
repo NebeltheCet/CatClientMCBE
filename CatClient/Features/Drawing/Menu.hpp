@@ -31,7 +31,7 @@ namespace Menu {
 		CustomDrawList::RectText(ImVec2(2.f, yPos), "CatClient", ImColor(110.f, 100.f, 130.f), selectableGUIClr); yPos += 20.f;
 		CustomDrawList::SelectableBox(ImVec2(2.f, yPos), "FPS", currentlySelectedTab, 0, wasActivated, selectableGUIClr, selectableOffClr, selectableOnClr, selectableActiveClr, Variables::ShowFPS); yPos += 20.f;
 		//CustomDrawList::SelectableBox(ImVec2(2.f, yPos), "CPS", currentlySelectedTab, 1, wasActivated, selectableGUIClr, selectableOffClr, selectableOnClr, selectableActiveClr, Variables::ShowCPS); yPos += 20.f;
-		//CustomDrawList::SelectableBox(ImVec2(5.f, yPos), "Debug", currentlySelectedTab, 1, wasActivated, selectableGUIClr, selectableOffClr, selectableOnClr, selectableActiveClr, Variables::debugIndicators); yPos += 20.f;
+		CustomDrawList::SelectableBox(ImVec2(2.f, yPos), "Debug", currentlySelectedTab, 1, wasActivated, selectableGUIClr, selectableOffClr, selectableOnClr, selectableActiveClr, Variables::debugIndicators); yPos += 20.f;
 
 		if (didOnce && !(Input::IsKeyDown(VK_DOWN) || Input::IsKeyDown(VK_UP) || Input::IsKeyDown(VK_RIGHT))) {
 			didOnce = false;

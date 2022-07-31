@@ -56,8 +56,8 @@ namespace Hooks {
 					return Originals::oHkPresent(pSChain, syncInterval, uFlags);
 			}
 
-			if (Input::IsKeyDown(VK_INSERT))
-				Menu::menuOpened = !Menu::menuOpened;
+			//if (Input::IsKeyReleased(VK_INSERT))
+				//Menu::menuOpened = !Menu::menuOpened;
 
 			ImGui::GetStyle().AntiAliasedFill = true;
 			ImGui::GetStyle().AntiAliasedLines = true;
@@ -66,7 +66,7 @@ namespace Hooks {
 			ImGui_ImplWin32_NewFrame();
 			ImGui::NewFrame();
 
-			Render::doRenderer();
+			Indicator::Render();
 			Menu::doMenu();
 
 			ImGui::Render();

@@ -113,7 +113,7 @@
     <ClInclude Include="SDK\ImGui\imstb_truetype.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Features\Drawing\Renderer.hpp">
+    <ClInclude Include="Features\Drawing\Renderer\Renderer.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Features\Drawing\Menu.hpp">
@@ -126,6 +126,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="SDK\Utils\InputStuff.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Drawing\Indicator.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

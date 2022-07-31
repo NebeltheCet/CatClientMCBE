@@ -180,8 +180,9 @@
   <ItemGroup>
     <ClInclude Include="Features\Drawing\Fonts\DroidSans.hpp" />
     <ClInclude Include="Features\Drawing\Fonts\SmallestPixelFont.hpp" />
+    <ClInclude Include="Features\Drawing\Indicator.hpp" />
     <ClInclude Include="Features\Drawing\Menu.hpp" />
-    <ClInclude Include="Features\Drawing\Renderer.hpp" />
+    <ClInclude Include="Features\Drawing\Renderer\Renderer.hpp" />
     <ClInclude Include="Hooks\Hooks.hpp" />
     <ClInclude Include="Includes.hpp" />
     <ClInclude Include="SDK\ImGui\imconfig.h" />
