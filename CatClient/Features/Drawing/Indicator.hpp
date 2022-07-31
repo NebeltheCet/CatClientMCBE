@@ -14,6 +14,9 @@ namespace Indicator {
 		if (Variables::ShowFPS) {
 			CustomDrawList::RectText(ImVec2(2.f, yPos), "FPS: " + std::to_string(FramesPerSecond), pColorIndicator, ImColor(25.f, 25.f, 25.f)); yPos -= 20.f;
 		}
+		if (Variables::ShowCPS) {
+			CustomDrawList::RectText(ImVec2(2.f, yPos), "CPS: " + std::to_string(Input::validClicks[0]) + " | " + std::to_string(Input::validClicks[1]), pColorIndicator, ImColor(25.f, 25.f, 25.f)); yPos -= 20.f;
+		}
 
 		/* Debug Indicators */
 		if (Variables::debugIndicators) {

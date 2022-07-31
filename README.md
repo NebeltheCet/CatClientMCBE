@@ -26,6 +26,7 @@
 ###### -Present
 ###### -Resize
 ###### -AVKeyItem
+###### -Mouse
 ###### -GameModeTick(Untested, Commented out)
 ###### -ActorTick(Untested, Commented out)
 
@@ -35,14 +36,14 @@
 - [ ] Fix Window Alignment on the Indicators
 - [ ] Freetype as Font Rasterizer(ImGui)
 - [ ] Add More Menu Objects(Sliders, Tabs)
-- [ ] Make Menu Toggleable
+- [X] Make Menu Toggleable
 
 #### Input
 - [X] Add a Proper way to Handle Toggle / Release / Hold Input
 
 #### Features
-- [ ] Add CPS Counter
-- [ ] Add Reach Indicator(Head Hitbox as Distance point)
+- [X] Add CPS Counter
+- [ ] Add Reach Indicator
 
 #### Global
 - [ ] Add UnInjection

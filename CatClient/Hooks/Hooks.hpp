@@ -15,6 +15,9 @@ namespace Hooks {
 		typedef void(__thiscall* AVKeyItem)(uint64_t, bool);
 		inline AVKeyItem oHkKeyItem;
 
+		typedef void(__fastcall* Mouse)(uint64_t, char, bool);
+		inline Mouse oHkMouse;
+
 		//typedef void(__thiscall* GameModeTick)(uint64_t*); 
 		//inline GameModeTick oHkGameModeTick;
 
@@ -55,9 +58,7 @@ namespace Hooks {
 				else
 					return Originals::oHkPresent(pSChain, syncInterval, uFlags);
 			}
-
-			//if (Input::IsKeyReleased(VK_INSERT))
-				//Menu::menuOpened = !Menu::menuOpened;
+			Menu::menuOpened = !Input::IsKeyToggled(VK_INSERT); // menu is on when starting minecraft
 
 			ImGui::GetStyle().AntiAliasedFill = true;
 			ImGui::GetStyle().AntiAliasedLines = true;
@@ -67,7 +68,7 @@ namespace Hooks {
 			ImGui::NewFrame();
 
 			Indicator::Render();
-			Menu::doMenu();
+			if (Menu::menuOpened) { Menu::doMenu(); }
 
 			ImGui::Render();
 
@@ -97,6 +98,21 @@ namespace Hooks {
 			Originals::oHkKeyItem(PressedKey, IsDown);
 		}
 
+		inline void hkMouse(uint64_t a1, char mouseAction, bool IsDown) {
+			if (IsDown) {
+				switch (mouseAction) {
+				case 1:
+					Input::cachedClicks[0]++;
+					break;
+				case 2:
+					Input::cachedClicks[1]++;
+					break;
+				}
+			}
+
+			Originals::oHkMouse(a1, mouseAction, IsDown);
+		}
+
 		//inline void hkGameModeTick(uint64_t* gm) {
 		//	Originals::oHkGameModeTick(gm);
 		//}
@@ -108,6 +124,7 @@ namespace Hooks {
 	inline bool InitHooks() {
 		/* Method Pointers */
 		uint64_t AddrKeyItem = Utils::FindSig("48 ? ? 48 ? ? ? 4C 8D 05 ? ? ? ? 89");
+		uint64_t AddrMouse = Utils::FindSig("48 8B C4 48 89 58 08 48 89 68 10 48 89 70 18 57 41 54 41 55 41 56 41 57 48 83 EC 60 44");
 		//uint64_t AddrGameMode = Utils::FindSig("E8 ? ? ? ? 80 BB ? ? ? ? ? 0F 84 ? ? ? ? 48 83 BB ? ? ? ? ?"); //GameMode::tick /* Unsure if the sig is right */
 		//uint64_t AddrActorTick = Utils::FindSig("E8 ? ? ? ? 49 8B 06 41 8B 5E 08 "); //Actor::tick /* Unsure if the sig is right */
 		uint64_t** pSwapChainVTable = *reinterpret_cast<uintptr_t***>(pSwapChain);
@@ -116,6 +133,7 @@ namespace Hooks {
 			return false;
 
 		HookFunction("hkKeyItem", (void*)AddrKeyItem, &Functions::hkKeyItem, reinterpret_cast<LPVOID*>(&Originals::oHkKeyItem));
+		HookFunction("hkMouse", (void*)AddrMouse, &Functions::hkMouse, reinterpret_cast<LPVOID*>(&Originals::oHkMouse));
 		//HookFunction("hkGameModeTick", (void*)AddrGameMode, &Functions::hkGameModeTick, reinterpret_cast<LPVOID*>(&Originals::oHkGameModeTick));
 		//HookFunction("hkActorTick", (void*)AddrActorTick, &Functions::hkActorTick, reinterpret_cast<LPVOID*>(&Originals::oHkActorTick));
 		if (pSwapChain) {

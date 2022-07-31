@@ -20,6 +20,14 @@ void mainThread(LPVOID lpParam) {
 	else
 		Utils::DebugLogOutput("Failed to Initialize Hooks.\n");
 
+	while (true) { /* Update these Values every second */
+		Sleep(1000);
+		Input::validClicks[0] = Input::cachedClicks[0];
+		Input::validClicks[1] = Input::cachedClicks[1];
+		Input::cachedClicks[0] = 0;
+		Input::cachedClicks[1] = 0;
+	}
+
 	//while (!Input::IsKeyDown(VK_END)) /* Crashes ;c */
 	//	Sleep(1);
 

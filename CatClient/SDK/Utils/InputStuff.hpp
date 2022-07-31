@@ -2,6 +2,8 @@
 
 namespace Input {
 	inline std::map<uint64_t, bool> KeyMap;
+	inline int cachedClicks[2] = { 0, 0 };
+	inline int validClicks[2] = { 0, 0 };
 	//Note dont reUse Input Functions...
 	//they're gonna activate every Function with the Same KeyBind but other Input Types.
 	//and they're gonna activate the function that is getting reused.
