@@ -4,6 +4,9 @@ namespace Variables {
 	inline bool ShowFPS = false;
 	inline bool ShowCPS = false;
 	inline bool debugIndicators = false;
+	inline bool Zoom = false;
+	inline bool Fullbright = false; // not implemented
+	inline bool ShowKeystrokes = false;
 }
 
 namespace CustomDrawList { /* Made for an Easier Way to Draw */
@@ -68,5 +71,20 @@ namespace CustomDrawList { /* Made for an Easier Way to Draw */
 		drawRect(ImVec2(vecPos.x - 2.8f, vecPos.y + 0.8f), ImVec2(vecPos.x + 96.8f, vecPos.y + 21.8f), ImColor(100.f, 100.f, 100.f, 25.f), 0.0f, 0, 1.6f); /* Shadow */
 		drawFilledRect(ImVec2(vecPos.x - 2.f, vecPos.y + 1.f), ImVec2(vecPos.x + 95.f, vecPos.y + 20.f), ImColor(pColorGUI.Value.x, pColorGUI.Value.y, pColorGUI.Value.z, 175.f), 0.0f, 0);
 		drawText(vecPos, pText, pColorText);
+	}
+
+	inline void drawKeystroke(ImVec2 vecPos, std::string pText, bool IsActive, bool IsSpace, ImColor pColorText, ImColor pColorActive, ImColor pColorGUI) {
+		if (!IsSpace) {
+			drawRect(ImVec2(vecPos.x - 3.f, vecPos.y - 4.f), ImVec2(vecPos.x + 32.f, vecPos.y + 32.f), pColorGUI, 0.0f, 0, 1.6f);
+			drawRect(ImVec2(vecPos.x - 2.8f, vecPos.y - 3.2f), ImVec2(vecPos.x + 32.8f, vecPos.y + 32.8f), ImColor(100.f, 100.f, 100.f, 25.f), 0.0f, 0, 1.6f); /* Shadow */
+			drawFilledRect(ImVec2(vecPos.x - 3.f, vecPos.y - 4.f), ImVec2(vecPos.x + 32.f, vecPos.y + 32.f), IsActive ? ImColor(pColorActive.Value.x, pColorActive.Value.y, pColorActive.Value.z, pColorActive.Value.w) : ImColor(pColorGUI.Value.x, pColorGUI.Value.y, pColorGUI.Value.z, 175.f), 0.0f, 0);
+			drawText(ImVec2((vecPos.x + 11.f) - calcTextSize(pText).x, (vecPos.y + 7.f) - calcTextSize(pText).y), pText, pColorText);
+		}
+		else {
+			drawRect(ImVec2(vecPos.x - 3.f, vecPos.y - 4.f), ImVec2(vecPos.x + 110.f, vecPos.y + 32.f), pColorGUI, 0.0f, 0, 1.6f);
+			drawRect(ImVec2(vecPos.x - 2.8f, vecPos.y - 3.2f), ImVec2(vecPos.x + 110.8f, vecPos.y + 32.8f), ImColor(100.f, 100.f, 100.f, 25.f), 0.0f, 0, 1.6f); /* Shadow */
+			drawFilledRect(ImVec2(vecPos.x - 3.f, vecPos.y - 4.f), ImVec2(vecPos.x + 110.f, vecPos.y + 32.f), IsActive ? ImColor(pColorActive.Value.x, pColorActive.Value.y, pColorActive.Value.z, pColorActive.Value.w) : ImColor(pColorGUI.Value.x, pColorGUI.Value.y, pColorGUI.Value.z, 175.f), 0.0f, 0);
+			drawText(ImVec2((vecPos.x + 42.f) - calcTextSize(pText).x, (vecPos.y + 7.f) - calcTextSize(pText).y), pText, pColorText);
+		}
 	}
 }

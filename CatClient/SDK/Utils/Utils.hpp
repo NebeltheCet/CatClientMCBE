@@ -32,5 +32,6 @@ namespace Utils {
 	void CreateClientDirectory(std::string path);
 	void DeleteLogContent(std::string path);
 	void DebugLogOutput(std::string log);
-	uintptr_t FindSig(const char* szSignature);
+	uint64_t FindSig(const char* szSignature);
+	uint64_t* findMultiLvlPtr(uint64_t baseAddr, std::vector<unsigned int> offsets);
 }

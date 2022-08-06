@@ -26,21 +26,35 @@ static ID3D11DeviceContext* pContext = nullptr;
 static ID3D11RenderTargetView* renderTargetView = nullptr;
 
 /* External Includes */
+//Fonts
 #include "Features/Drawing/Fonts/SmallestPixelFont.hpp"
 #include "Features/Drawing/Fonts/DroidSans.hpp"
 
+//ImGui
 #include "SDK/ImGui/imgui.h"
 #include "SDK/ImGui/imgui_impl_win32.h"
 #include "SDK/ImGui/imgui_impl_dx11.h"
 #include "SDK/ImGui/imgui_internal.h"
 
+//minhook
 #include "SDK/Minhook/minhook.h"
 
+//Utils
 #include "SDK/Utils/InputStuff.hpp"
 #include "SDK/Utils/Utils.hpp"
+#include "SDK/Utils/Vector.hpp"
 
+//Clases
+#include "SDK/Classes/CGuiData.hpp"
+#include "SDK/Classes/CActor.hpp"
+#include "SDK/Classes/CLevelRender.hpp"
+#include "SDK/Classes/CLocalPlayer.hpp"
+#include "SDK/Classes/CClientInstance.hpp"
+
+//Drawing related Stuff
 #include "Features/Drawing/Renderer/Renderer.hpp"
 #include "Features/Drawing/Menu.hpp"
 #include "Features/Drawing/Indicator.hpp"
 
+//Hooks
 #include "Hooks/Hooks.hpp"

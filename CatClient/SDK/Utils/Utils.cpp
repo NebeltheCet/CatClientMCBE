@@ -22,7 +22,7 @@ void Utils::DeleteLogContent(std::string path) {
 	std::string precisePath = getenv("APPDATA") + std::string("\\..\\Local\\Packages\\Microsoft.MinecraftUWP_8wekyb3d8bbwe\\RoamingState\\" + path);
 	if (doesPathExist(precisePath)) {
 		std::ofstream ClearFile;
-		ClearFile.open("test.txt", std::ofstream::out | std::ofstream::trunc);
+		ClearFile.open(precisePath, std::ofstream::out | std::ofstream::trunc);
 		ClearFile.close();
 	}
 }
@@ -48,22 +48,46 @@ void Utils::DebugLogOutput(std::string log) {
 	return;
 }
 
-uintptr_t Utils::FindSig(const char* szSignature) {
+uint64_t* Utils::findMultiLvlPtr(uint64_t baseAddr, std::vector<unsigned int> offsets) {
+
+	auto hwnd = GetModuleHandle("Minecraft.Windows.exe");
+
+	auto ptr = (uint64_t)(hwnd)+baseAddr;
+	auto i = 0;
+
+	do {
+
+		if (*(uint64_t*)ptr + offsets[i] == offsets[i] || *(uint64_t*)ptr + offsets[i] > 0xFFFFFFFFFFFF)
+			break;
+
+		ptr = *(uint64_t*)ptr + offsets[i];
+
+		if (ptr == NULL)
+			break;
+
+		i++;
+
+	} while (i < offsets.size());
+
+	return (i == offsets.size() ? (uint64_t*)ptr : nullptr);
+};
+
+uint64_t Utils::FindSig(const char* szSignature) {
 	const char* pattern = szSignature;
-	uintptr_t firstMatch = 0;
-	static const uintptr_t rangeStart = (uintptr_t)GetModuleHandleA("Minecraft.Windows.exe");
+	uint64_t firstMatch = 0;
+	static const uint64_t rangeStart = (uint64_t)GetModuleHandleA("Minecraft.Windows.exe");
 	static MODULEINFO miModInfo;
 	static bool init = false;
 	if (!init) {
 		init = true;
 		GetModuleInformation(GetCurrentProcess(), (HMODULE)rangeStart, &miModInfo, sizeof(MODULEINFO));
 	}
-	static const uintptr_t rangeEnd = rangeStart + miModInfo.SizeOfImage;
+	static const uint64_t rangeEnd = rangeStart + miModInfo.SizeOfImage;
 
 	BYTE patByte = GET_BYTE(pattern);
 	const char* oldPat = pattern;
 
-	for (uintptr_t pCur = rangeStart; pCur < rangeEnd; pCur++)
+	for (uint64_t pCur = rangeStart; pCur < rangeEnd; pCur++)
 	{
 		if (!*pattern)
 			return firstMatch;

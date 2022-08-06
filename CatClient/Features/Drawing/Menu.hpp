@@ -10,7 +10,7 @@ namespace Menu {
 		float yPos = 0.f;
 		bool wasActivated = false;
 		static bool didOnce = false;
-		const int maxSelectedTabs = 1;
+		const int maxSelectedTabs = 4;
 		static int currentlySelectedTab = 0;
 		
 		if (Input::IsKeyDown(VK_DOWN) && !didOnce) { currentlySelectedTab += 1; didOnce = true; wasActivated = false; }
@@ -31,7 +31,9 @@ namespace Menu {
 		CustomDrawList::RectText(ImVec2(2.f, yPos), "CatClient", ImColor(110.f, 100.f, 130.f), selectableGUIClr); yPos += 20.f;
 		CustomDrawList::SelectableBox(ImVec2(2.f, yPos), "FPS", currentlySelectedTab, 0, wasActivated, selectableGUIClr, selectableOffClr, selectableOnClr, selectableActiveClr, Variables::ShowFPS); yPos += 20.f;
 		CustomDrawList::SelectableBox(ImVec2(2.f, yPos), "CPS", currentlySelectedTab, 1, wasActivated, selectableGUIClr, selectableOffClr, selectableOnClr, selectableActiveClr, Variables::ShowCPS); yPos += 20.f;
-		CustomDrawList::SelectableBox(ImVec2(2.f, yPos), "Debug", currentlySelectedTab, 2, wasActivated, selectableGUIClr, selectableOffClr, selectableOnClr, selectableActiveClr, Variables::debugIndicators); yPos += 20.f;
+		CustomDrawList::SelectableBox(ImVec2(2.f, yPos), "Keystrokes", currentlySelectedTab, 2, wasActivated, selectableGUIClr, selectableOffClr, selectableOnClr, selectableActiveClr, Variables::ShowKeystrokes); yPos += 20.f;
+		CustomDrawList::SelectableBox(ImVec2(2.f, yPos), "Zoom(V)", currentlySelectedTab, 3, wasActivated, selectableGUIClr, selectableOffClr, selectableOnClr, selectableActiveClr, Variables::Zoom); yPos += 20.f;
+		//CustomDrawList::SelectableBox(ImVec2(2.f, yPos), "Debug", currentlySelectedTab, 4, wasActivated, selectableGUIClr, selectableOffClr, selectableOnClr, selectableActiveClr, Variables::debugIndicators); yPos += 20.f;
 
 		if (didOnce && !(Input::IsKeyDown(VK_DOWN) || Input::IsKeyDown(VK_UP) || Input::IsKeyDown(VK_RIGHT))) {
 			didOnce = false;

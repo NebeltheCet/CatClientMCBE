@@ -20,7 +20,26 @@ void mainThread(LPVOID lpParam) {
 	else
 		Utils::DebugLogOutput("Failed to Initialize Hooks.\n");
 
-	while (true) { /* Update these Values every second */
+	while (!Input::IsKeyReleased(VK_END)) /* Crashes ;c */
+		Sleep(1);
+
+	/* Hooks */
+	if (Hooks::UnInitHooks())
+		Utils::DebugLogOutput("Successfully Uninitialized Hooks.\n");
+	else
+		Utils::DebugLogOutput("Failed to Uninitialize Hooks.\n");
+
+	/* ImGui */
+	ImGui_ImplDX11_Shutdown();
+	ImGui_ImplWin32_Shutdown();
+	ImGui::DestroyContext();
+
+	Utils::DebugLogOutput("Uninjected.");
+	//FreeLibraryAndExitThread(static_cast<HMODULE>(lpParam), EXIT_SUCCESS); //crashes here(idk why)
+}
+
+void CPSThread(LPVOID lpParam) {
+	while (!Input::IsKeyReleased(VK_END)) { /* Update these Values every second */
 		Sleep(1000);
 		Input::validClicks[0] = Input::cachedClicks[0];
 		Input::validClicks[1] = Input::cachedClicks[1];
@@ -28,27 +47,17 @@ void mainThread(LPVOID lpParam) {
 		Input::cachedClicks[1] = 0;
 	}
 
-	//while (!Input::IsKeyDown(VK_END)) /* Crashes ;c */
-	//	Sleep(1);
-
-	///* Hooks */
-	//if (Hooks::UnInitHooks())
-	//	Utils::DebugLogOutput("Successfully Uninitialized Hooks.\n");
-	//else
-	//	Utils::DebugLogOutput("Failed to Uninitialize Hooks.\n");
-
-	///* ImGui */
-	//ImGui_ImplDX11_Shutdown();
-	//ImGui_ImplWin32_Shutdown();
-	//ImGui::DestroyContext();
-
-	//Utils::DebugLogOutput("Uninjected.");
-	//FreeLibraryAndExitThread(static_cast<HMODULE>(lpParam), EXIT_SUCCESS);
+	Utils::DebugLogOutput("Stopped CPSThread");
+	FreeLibraryAndExitThread(static_cast<HMODULE>(lpParam), EXIT_SUCCESS); 
 }
 
 BOOL WINAPI DllMain(HMODULE hModule, DWORD dwCallReason, LPVOID lpReserved) {
 	if (dwCallReason == DLL_PROCESS_ATTACH) {
 		HANDLE hThread = CreateThread(nullptr, NULL, reinterpret_cast<LPTHREAD_START_ROUTINE>(mainThread), hModule, NULL, nullptr);
+		HANDLE hCPSThread = CreateThread(nullptr, NULL, reinterpret_cast<LPTHREAD_START_ROUTINE>(CPSThread), hModule, NULL, nullptr);
+		if (hCPSThread)
+			CloseHandle(hCPSThread);
+
 		if (hThread)
 			CloseHandle(hThread);
 	}

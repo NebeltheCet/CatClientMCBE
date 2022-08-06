@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -185,6 +185,11 @@
     <ClInclude Include="Features\Drawing\Renderer\Renderer.hpp" />
     <ClInclude Include="Hooks\Hooks.hpp" />
     <ClInclude Include="Includes.hpp" />
+    <ClInclude Include="SDK\Classes\CActor.hpp" />
+    <ClInclude Include="SDK\Classes\CClientInstance.hpp" />
+    <ClInclude Include="SDK\Classes\CGuiData.hpp" />
+    <ClInclude Include="SDK\Classes\CLevelRender.hpp" />
+    <ClInclude Include="SDK\Classes\CLocalPlayer.hpp" />
     <ClInclude Include="SDK\ImGui\imconfig.h" />
     <ClInclude Include="SDK\ImGui\imgui.h" />
     <ClInclude Include="SDK\ImGui\imgui_impl_dx11.h" />
@@ -203,6 +208,7 @@
     <ClInclude Include="SDK\Minhook\trampoline.h" />
     <ClInclude Include="SDK\Utils\InputStuff.hpp" />
     <ClInclude Include="SDK\Utils\Utils.hpp" />
+    <ClInclude Include="SDK\Utils\Vector.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

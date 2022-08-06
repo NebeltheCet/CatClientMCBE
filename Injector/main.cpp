@@ -155,6 +155,8 @@ startOfLoader:
     else
         std::cout << "Failed to Inject.\n";
 
+    Sleep(800);
+    system("cls");
     std::cout << "Back to Start...\n";
     Sleep(800);
     system("cls");

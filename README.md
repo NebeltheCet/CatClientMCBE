@@ -11,15 +11,16 @@
 ## Features
 
 ##### Visuals
-###### -None
+###### -Keystrokes
+###### -Watermark
+###### -Zoom
+###### -FPS
 
 ##### Misc
 ###### -None
 
 ##### Drawing
-###### -ImGui Drawing(Optimized but blurry on uwp games??)
-###### -Watermark
-###### -FPS
+###### -ImGui Drawing
 ###### -SideGui
 
 ##### Hooks
@@ -27,8 +28,7 @@
 ###### -Resize
 ###### -AVKeyItem
 ###### -Mouse
-###### -GameModeTick(Untested, Commented out)
-###### -ActorTick(Untested, Commented out)
+###### -FOV
 
 ## To-Do
 
@@ -43,6 +43,7 @@
 
 #### Features
 - [X] Add CPS Counter
+- [X] Add Keystrokes
 - [ ] Add Reach Indicator
 
 #### Global

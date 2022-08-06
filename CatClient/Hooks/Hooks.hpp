@@ -18,11 +18,11 @@ namespace Hooks {
 		typedef void(__fastcall* Mouse)(uint64_t, char, bool);
 		inline Mouse oHkMouse;
 
-		//typedef void(__thiscall* GameModeTick)(uint64_t*); 
-		//inline GameModeTick oHkGameModeTick;
+		typedef float(__stdcall* Gamma)(void*);
+		inline Gamma oHkGamma;
 
-		//typedef void(__thiscall* ActorTick)(uint64_t&);
-		//inline ActorTick oHkActorTick;
+		typedef float(__stdcall* FOV)(void*, void*, void*);
+		inline FOV oHkFOV;
 
 		/* Drawing */
 
@@ -78,7 +78,7 @@ namespace Hooks {
 			return Originals::oHkPresent(pSChain, syncInterval, uFlags);
 		};
 
-		inline HRESULT __stdcall hkResize(IDXGISwapChain* pSwapChain, UINT uBufCount, UINT uWidth, UINT uHeight, DXGI_FORMAT newFormat, UINT uFLags) {
+		inline HRESULT __stdcall hkResize(IDXGISwapChain* pSwapChain, UINT uBufCount, UINT uWidth, UINT uHeight, DXGI_FORMAT newFormat, UINT uFlags) {
 			if (renderTargetView)
 				renderTargetView->Release();
 
@@ -89,7 +89,21 @@ namespace Hooks {
 				pDevice->Release();
 
 			pDevice = nullptr;
-			return Originals::oHkResize(pSwapChain, uBufCount, uWidth, uHeight, newFormat, uFLags);
+			return Originals::oHkResize(pSwapChain, uBufCount, uWidth, uHeight, newFormat, uFlags);
+		}
+
+		inline float hkGamma(void* unk1) { //not implemented
+			if (Variables::Fullbright)
+				return 45.f; //random value i chose
+
+			return Originals::oHkGamma(unk1);
+		}
+
+		inline float hkFOV(void* unk1, void* unk2, void* unk3) { /* I didnt care enough to look for the argument types */
+			if (Variables::Zoom && Input::IsKeyDown('V'))
+				return 25.f;
+
+			return Originals::oHkFOV(unk1, unk2, unk3);
 		}
 
 		inline void hkKeyItem(uint64_t PressedKey, bool IsDown) {
@@ -98,7 +112,7 @@ namespace Hooks {
 			Originals::oHkKeyItem(PressedKey, IsDown);
 		}
 
-		inline void hkMouse(uint64_t a1, char mouseAction, bool IsDown) {
+		inline void hkMouse(uint64_t unk1, char mouseAction, bool IsDown) {
 			if (IsDown) {
 				switch (mouseAction) {
 				case 1:
@@ -110,23 +124,14 @@ namespace Hooks {
 				}
 			}
 
-			Originals::oHkMouse(a1, mouseAction, IsDown);
+			Originals::oHkMouse(unk1, mouseAction, IsDown);
 		}
-
-		//inline void hkGameModeTick(uint64_t* gm) {
-		//	Originals::oHkGameModeTick(gm);
-		//}
-
-		//inline void hkActorTick(uint64_t blockSource) {
-		//	Originals::oHkActorTick(blockSource);
-		//}
 	}
 	inline bool InitHooks() {
 		/* Method Pointers */
-		uint64_t AddrKeyItem = Utils::FindSig("48 ? ? 48 ? ? ? 4C 8D 05 ? ? ? ? 89");
-		uint64_t AddrMouse = Utils::FindSig("48 8B C4 48 89 58 08 48 89 68 10 48 89 70 18 57 41 54 41 55 41 56 41 57 48 83 EC 60 44");
-		//uint64_t AddrGameMode = Utils::FindSig("E8 ? ? ? ? 80 BB ? ? ? ? ? 0F 84 ? ? ? ? 48 83 BB ? ? ? ? ?"); //GameMode::tick /* Unsure if the sig is right */
-		//uint64_t AddrActorTick = Utils::FindSig("E8 ? ? ? ? 49 8B 06 41 8B 5E 08 "); //Actor::tick /* Unsure if the sig is right */
+		uint64_t AddrKeyItem = Utils::FindSig("48 83 EC ? 0F B6 C1 4C 8D 05");
+		uint64_t AddrMouse = Utils::FindSig("48 8B C4 48 89 58 ? 48 89 68 ? 48 89 70 ? 57 41 54 41 55 41 56 41 57 48 83 EC ? 44 0F B7 BC 24");
+		uint64_t AddrFOV = Utils::FindSig("48 89 5C 24 ? 56 48 83 EC ? 0F 29 74 24 ? 44 0F 29 44 24");
 		uint64_t** pSwapChainVTable = *reinterpret_cast<uintptr_t***>(pSwapChain);
 
 		if (MH_Initialize() != MH_STATUS::MH_OK)
@@ -134,8 +139,7 @@ namespace Hooks {
 
 		HookFunction("hkKeyItem", (void*)AddrKeyItem, &Functions::hkKeyItem, reinterpret_cast<LPVOID*>(&Originals::oHkKeyItem));
 		HookFunction("hkMouse", (void*)AddrMouse, &Functions::hkMouse, reinterpret_cast<LPVOID*>(&Originals::oHkMouse));
-		//HookFunction("hkGameModeTick", (void*)AddrGameMode, &Functions::hkGameModeTick, reinterpret_cast<LPVOID*>(&Originals::oHkGameModeTick));
-		//HookFunction("hkActorTick", (void*)AddrActorTick, &Functions::hkActorTick, reinterpret_cast<LPVOID*>(&Originals::oHkActorTick));
+		HookFunction("hkFOV", (void*)AddrFOV, &Functions::hkFOV, reinterpret_cast<LPVOID*>(&Originals::oHkFOV));
 		if (pSwapChain) {
 			HookFunction("hkPresent", (void*)pSwapChainVTable[8], &Functions::hkPresent, reinterpret_cast<LPVOID*>(&Originals::oHkPresent));
 			HookFunction("hkResize", (void*)pSwapChainVTable[13], &Functions::hkResize, reinterpret_cast<LPVOID*>(&Originals::oHkResize));
@@ -148,10 +152,10 @@ namespace Hooks {
 	}
 
 	inline bool UnInitHooks() {
-		if (MH_Uninitialize() != MH_STATUS::MH_OK)
+		if (MH_DisableHook(MH_ALL_HOOKS) != MH_STATUS::MH_OK)
 			return false;
 
-		if (MH_DisableHook(MH_ALL_HOOKS) != MH_STATUS::MH_OK)
+		if (MH_Uninitialize() != MH_STATUS::MH_OK)
 			return false;
 
 		return true;
